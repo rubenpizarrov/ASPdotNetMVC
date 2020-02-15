@@ -25,8 +25,8 @@ namespace MyShop.DataAccess.Memory
 
         }
         
-        private void Commit()
-        {
+        public void Commit()
+        {           
             cache["products"] = products;
         }
 
