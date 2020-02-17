@@ -1,4 +1,5 @@
-﻿using MyShop.Core.Models;
+﻿using MyShop.Core.Contracts;
+using MyShop.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyShop.DataAccess.Memory
 {
-    public class InMemoryRepository<T> where T : BaseEntity
+    public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity
     {
         ObjectCache cache = MemoryCache.Default;
         List<T> items;
@@ -24,17 +25,17 @@ namespace MyShop.DataAccess.Memory
             }
         }
 
-        public void Commit() 
+        public void Commit()
         {
             cache[className] = items;
         }
 
-        public void Insert(T t) 
+        public void Insert(T t)
         {
             items.Add(t);
         }
 
-        public void Update(T t) 
+        public void Update(T t)
         {
             T tToUpdate = items.Find(i => i.Id == t.Id);
 
@@ -48,7 +49,7 @@ namespace MyShop.DataAccess.Memory
             }
         }
 
-        public T Find(string Id) 
+        public T Find(string Id)
         {
             T t = items.Find(i => i.Id == Id);
             if (t != null)
@@ -62,12 +63,12 @@ namespace MyShop.DataAccess.Memory
         }
 
 
-        public IQueryable<T> Collection() 
+        public IQueryable<T> Collection()
         {
             return items.AsQueryable();
         }
 
-        public void Delete(string Id) 
+        public void Delete(string Id)
         {
             T tToDelete = items.Find(i => i.Id == Id);
             if (tToDelete != null)
